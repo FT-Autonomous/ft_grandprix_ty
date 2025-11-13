@@ -32,7 +32,7 @@ set-executionpolicy RemoteSigned
 
 You may then close the powershell instance running as administrator.
 
-Go to the [the github page](https://github.com/FT-Autonomous/ft_grandprix) and click *download zip*.
+Go to the [the github page](https://github.com/FT-Autonomous/ft_grandprix_ty) and click *download zip*.
 Extract the `ft_grandprix-main` folder somewhere.
 
 Open the folder where you extracted the ZIP, shift-right-click and
@@ -75,4 +75,4 @@ To start writing a driver, you can start by modifying the `drivers.template` dri
 
 # Reporting Bugs
 
-Make an issue on github and I will try to fix it.
+Make an issue on github and we will try to fix it.
