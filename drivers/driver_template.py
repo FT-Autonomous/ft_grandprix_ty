@@ -7,6 +7,15 @@ HOW IT WORKS:
 - The car has a "laser scanner" that measures distances to walls
 - We use this information to decide where to turn and how fast to go
 - You can modify the functions below to make your car drive better!
+- You have to write the main driving logic in the drive_car() function
+
+List of functions you can use in your driving logic:
+- get_current_speed(): Get current speed including any boosts
+- clean_laser_data(laser_ranges): Remove rear laser measurements (we only care about seeing the front and sides, ignore back lasers)
+- find_distance_changes(laser_ranges): Detect big changes in laser data
+- find_walls_and_corners(distance_changes): Identify walls and corners to decide when to turn
+- decide_where_to_turn(laser_ranges, important_points): Decide steering angle (How much do we turn? Negative = left, Positive = right)
+- decide_how_fast(steering_angle, laser_ranges): Decide speed based on situation (you want to slow down when turning sharply, or when walls are close, speed up when the way is straight and clear))
 
 """
 
