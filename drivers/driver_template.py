@@ -25,6 +25,35 @@ class Driver:
 
         # Speed adjustment factors
         self.speed_boost = 1.0        # Speed multiplier (1.0 = normal, can be changed with go_faster/go_slower)
+# MAIN DRIVING FUNCTION - The brain of our car!
+
+    def drive_car(self, laser_ranges, car_state=None):
+        """
+        MAIN FUNCTION: This is where all the driving decisions happen!
+
+        This function is called by the racing simulator many times per second
+        to control the car. It decides where to turn and how fast to go.
+        
+        
+        You want to use the functions defined above to help make these decisions. Play around with them
+        and see how they affect your ca
+        Input:r's driving!
+
+            laser_ranges: List of distances from the laser scanner
+            car_state: Information about the car (speed, position, etc.) - optional
+
+        Outputs:
+            speed, steering_angle - how fast to go and where to turn
+        """
+
+
+
+        steering_angle = 0
+
+        speed = self.car_speed
+
+        return speed, steering_angle
+
 
     def go_faster(self, amount=0.1):
         """
@@ -33,7 +62,7 @@ class Driver:
         Use this function to increase your car's speed. Great for straight sections!
         You can call this function in your drive_car() method when you want to speed up.
 
-        Args:
+        Input:
             amount: How much faster to go (default: 0.1, range: 0.01 to 0.5)
 
         Example usage in drive_car():
@@ -41,7 +70,6 @@ class Driver:
                 self.go_faster(0.2)
         """
         self.speed_boost = min(2.0, self.speed_boost + amount)  # Don't go faster than 2x normal speed
-        print(f"Going faster! Speed boost: {self.speed_boost:.1f}x")
 
     def go_slower(self, amount=0.1):
         """
@@ -50,7 +78,7 @@ class Driver:
         Use this function to decrease your car's speed. Good for tricky corners!
         You can call this function in your drive_car() method when you need to slow down.
 
-        Args:
+        Input:
             amount: How much slower to go (default: 0.1, range: 0.01 to 0.5)
 
         Example usage in drive_car():
@@ -58,7 +86,6 @@ class Driver:
                 self.go_slower(0.2)
         """
         self.speed_boost = max(0.1, self.speed_boost - amount)  # Don't go slower than 0.1x normal speed
-        print(f"Going slower! Speed boost: {self.speed_boost:.1f}x")
 
     def reset_speed(self):
         """
@@ -74,7 +101,7 @@ class Driver:
         """
         Get your current speed including any speed boosts!
 
-        Returns:
+        Outputs:
             float: Your current speed (car_speed * speed_boost)
 
         Use this in your drive_car() method to get the speed to return:
@@ -88,10 +115,10 @@ class Driver:
 
         WHY: The car can't see behind it, so we ignore those measurements to avoid confusion.
 
-        Args:
+        Input:
             laser_ranges: List of distances measured by the laser scanner
 
-        Returns:
+        Outputs:
             Cleaned list of laser distances (only the front and sides)
         """
         # Remove 1/8 of the measurements from the beginning and end (behind the car)
@@ -100,9 +127,8 @@ class Driver:
 
         return cleaned_data
 
-    # ============================================================================
+    
     # WALL DETECTION - Find walls and obstacles
-    # ============================================================================
 
     def find_distance_changes(self, laser_ranges):
         """
@@ -111,10 +137,10 @@ class Driver:
         WHY: When there's a big difference between adjacent laser points,
              it usually means there's a wall or obstacle there!
 
-        Args:
+        Input:
             laser_ranges: List of distances measured by the laser scanner
 
-        Returns:
+        Outputs:
             List of differences between adjacent laser measurements
         """
         changes = [0.0]  # Start with 0 for the first measurement
@@ -131,10 +157,10 @@ class Driver:
 
         WHY: We need to know where the walls are so we can avoid them!
 
-        Args:
+        Input:
             distance_changes: List of differences between laser measurements
 
-        Returns:
+        Outputs:
             List of important wall/corner points that need attention
         """
         important_points = []
@@ -157,11 +183,11 @@ class Driver:
 
         WHY: duh
 
-        Args:
+        Input:
             laser_ranges: List of distances measured by the laser scanner
             important_points: List of wall/corner locations to avoid
 
-        Returns:
+        Outputs:
             Steering angle: negative = turn left, positive = turn right
         """
 
@@ -201,11 +227,11 @@ class Driver:
 
         WHY: We should slow down when turning sharply or when walls are close!
 
-        Args:
+        Input:
             steering_angle: How much we're turning
             laser_ranges: List of distances measured by the laser scanner
 
-        Returns:
+        Outputs:
             Speed value (0.0 = stopped, 1.0 = maximum speed)
         """
 
@@ -230,36 +256,7 @@ class Driver:
 
         return speed
 
-    # MAIN DRIVING FUNCTION - The brain of our autonomous car!
-
-    def drive_car(self, laser_ranges, car_state=None):
-        """
-        MAIN FUNCTION: This is where all the driving decisions happen!
-
-        This function is called by the racing simulator many times per second
-        to control the car. It decides where to turn and how fast to go.
-        
-        
-        You want to use the functions defined above to help make these decisions. Play around with them
-        and see how they affect your car's driving!
-
-        Args:
-            laser_ranges: List of distances from the laser scanner
-            car_state: Information about the car (speed, position, etc.) - optional
-
-        Returns:
-            tuple: (speed, steering_angle) - how fast to go and where to turn
-        """
-
-
-
-        steering_angle = 0
-
-        speed = self.car_speed
-
-        return speed, steering_angle
-
-
+    
 # dont worry about this
     def process_lidar(self, ranges, state=None):
         return self.drive_car(ranges, state)
