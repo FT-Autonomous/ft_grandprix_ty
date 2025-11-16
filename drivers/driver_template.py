@@ -24,9 +24,9 @@ import numpy as np
 class Driver:
     def __init__(self):
         # CAR SETTINGS - Try changing these numbers!
-        self.car_speed = 0.5          # How fast should your car go? (0.1 to 1.0)
-        self.turn_sensitivity = 0.6   # How quickly should your car turn? (0.1 to 2.0)
-        self.safety_distance = 0.3    # How far to stay from walls? (0.1 to 1.0)
+        self.car_speed = 0.5          # How fast should your car go? 
+        self.turn_sensitivity = 0.6   # How quickly should your car turn? 
+        self.safety_distance = 0.3    # How far to stay from walls? 
         
         # Riskier:
         self.racing_mode = False      # Set to True for faster racing
@@ -34,6 +34,8 @@ class Driver:
 
         # Speed adjustment factors
         self.speed_boost = 1.0        # Speed multiplier (1.0 = normal, can be changed with go_faster/go_slower)
+
+    
 # MAIN DRIVING FUNCTION - The brain of our car!
 
     def drive_car(self, laser_ranges, car_state=None):
@@ -45,8 +47,8 @@ class Driver:
         
         
         You want to use the functions defined above to help make these decisions. Play around with them
-        and see how they affect your ca
-        Input:r's driving!
+        and see how they affect your car's driving!
+        Input:
 
             laser_ranges: List of distances from the laser scanner
             car_state: Information about the car (speed, position, etc.) - optional
@@ -202,6 +204,7 @@ class Driver:
 
         # METHOD 1: Simple - Turn toward the farthest distance
         max_distance = max(laser_ranges)
+        laser_ranges = list(laser_ranges)
         best_direction = laser_ranges.index(max_distance)
 
         # METHOD 2: Advanced - Avoid important points (walls)
