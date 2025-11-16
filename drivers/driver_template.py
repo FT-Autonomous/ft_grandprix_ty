@@ -24,18 +24,16 @@ import numpy as np
 class Driver:
     def __init__(self):
         # CAR SETTINGS - Try changing these numbers!
-        self.car_speed = 0.5          # How fast should your car go? 
-        self.turn_sensitivity = 0.6   # How quickly should your car turn? 
-        self.safety_distance = 0.3    # How far to stay from walls? 
+        self.car_speed = 5         # How fast should your car go? (0.1 to 1.0)
+        self.turn_sensitivity = 0.5   # How quickly should your car turn? (0.1 to 2.0)
+        self.safety_distance = 3    # How far to stay from walls? (0.1 to 1.0)
         
         # Riskier:
-        self.racing_mode = False      # Set to True for faster racing
+        self.racing_mode = True     # Set to True for faster racing
         self.aggressive_turns = False # Set to True for sharper turns
 
         # Speed adjustment factors
         self.speed_boost = 1.0        # Speed multiplier (1.0 = normal, can be changed with go_faster/go_slower)
-
-    
 # MAIN DRIVING FUNCTION - The brain of our car!
 
     def drive_car(self, laser_ranges, car_state=None):
@@ -47,8 +45,8 @@ class Driver:
         
         
         You want to use the functions defined above to help make these decisions. Play around with them
-        and see how they affect your car's driving!
-        Input:
+        and see how they affect your ca
+        Input:r's driving!
 
             laser_ranges: List of distances from the laser scanner
             car_state: Information about the car (speed, position, etc.) - optional
@@ -57,11 +55,16 @@ class Driver:
             speed, steering_angle - how fast to go and where to turn
         """
 
+        
 
+        data = self.clean_laser_data(laser_ranges)
+        changes = self.find_distance_changes(data)
+        important_points = self.find_walls_and_corners(changes)
 
-        steering_angle = 0
+        steering_angle = self.decide_where_to_turn(data, important_points)
 
-        speed = self.car_speed
+        speed = self.decide_how_fast(steering_angle=steering_angle, laser_ranges=data)
+        
 
         return speed, steering_angle
 
@@ -263,7 +266,7 @@ class Driver:
 
         # Racing mode - go faster on straight sections
         if self.racing_mode and abs(steering_angle) < 0.2 and min_distance > self.safety_distance * 2:
-            speed = min(1.0, speed * 1.3)  # Go 30% faster on clear straight sections
+            speed = min(1.0, speed * 1.8)  # Go 30% faster on clear straight sections
 
 
         return speed
