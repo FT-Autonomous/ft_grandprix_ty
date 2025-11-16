@@ -17,6 +17,11 @@ List of functions you can use in your driving logic:
 - decide_where_to_turn(laser_ranges, important_points): Decide steering angle (How much do we turn? Negative = left, Positive = right)
 - decide_how_fast(steering_angle, laser_ranges): Decide speed based on situation (you want to slow down when turning sharply, or when walls are close, speed up when the way is straight and clear))
 
+If you are confident instead of using decide_how_fast, you can directly set speed in drive_car() using these, you will need to add some more logic to use these properly:
+- go_faster(amount=0.1): Increase speed temporarily
+- go_slower(amount=0.1): Decrease speed temporarily
+- reset_speed(): Reset speed to 1.0
+
 """
 
 import numpy as np
@@ -24,7 +29,7 @@ import numpy as np
 class Driver:
     def __init__(self):
         # CAR SETTINGS - Try changing these numbers!
-        self.car_speed = 0.5          # How fast should your car go? 
+        self.car_speed = 1.0          # How fast should your car go? 
         self.turn_sensitivity = 0.6   # How quickly should your car turn? 
         self.safety_distance = 0.3    # How far to stay from walls? 
         
@@ -48,6 +53,8 @@ class Driver:
         
         You want to use the functions defined above to help make these decisions. Play around with them
         and see how they affect your car's driving!
+
+        Your goal is to set speed and steering_angle based on the input and using the functions above.
         Input:
 
             laser_ranges: List of distances from the laser scanner
@@ -56,12 +63,8 @@ class Driver:
         Outputs:
             speed, steering_angle - how fast to go and where to turn
         """
-
-
-
+        speed = 1.0
         steering_angle = 0
-
-        speed = self.car_speed
 
         return speed, steering_angle
 
@@ -76,11 +79,14 @@ class Driver:
         Input:
             amount: How much faster to go (default: 0.1, range: 0.01 to 0.5)
 
+        Outputs:
+            float: Your new speed after the boost
         Example usage in drive_car():
             if you're on a straight part of the track:
                 self.go_faster(0.2)
         """
         self.speed_boost = min(2.0, self.speed_boost + amount)  # Don't go faster than 2x normal speed
+        return self.get_current_speed()
 
     def go_slower(self, amount=0.1):
         """
@@ -92,11 +98,14 @@ class Driver:
         Input:
             amount: How much slower to go (default: 0.1, range: 0.01 to 0.5)
 
+        Outputs:
+            Your new speed after slowing down
         Example usage in drive_car():
             if you see a sharp turn ahead:
                 self.go_slower(0.2)
         """
         self.speed_boost = max(0.1, self.speed_boost - amount)  # Don't go slower than 0.1x normal speed
+        return self.get_current_speed()
 
     def reset_speed(self):
         """
@@ -263,7 +272,7 @@ class Driver:
 
         # Racing mode - go faster on straight sections
         if self.racing_mode and abs(steering_angle) < 0.2 and min_distance > self.safety_distance * 2:
-            speed = min(1.0, speed * 1.3)  # Go 30% faster on clear straight sections
+            speed = max(1.0, speed * 1.3)  # Go 30% faster on clear straight sections
 
 
         return speed
